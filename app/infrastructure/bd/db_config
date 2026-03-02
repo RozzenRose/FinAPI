@@ -1,0 +1,24 @@
+accounts
+| column | type    |
+| ------ | ------- |
+| id     | UUID    |<<<---------------------------------
+| name   | VARCHAR |                                    |
+| type   | ENUM    |                                    |
+                                                        |
+                                                        |
+transaction                                             |
+| column      | type      |                             |
+| ----------- | --------- |                             |
+| id          | UUID (PK) |<<<----------------------    |
+| timestamp   | datetime  |                         |   |
+| description | text      |                         |   |
+                                                    |   |
+                                                    |   |
+transaction_entries                                 |   |
+| column         | type                        |    |   |
+| -------------- | --------------------------- |    |   |
+| id             | UUID (PK)                   |    |   |
+| transaction_id | UUID (FK → transactions.id) |----    |
+| account_id     | UUID (FK → accounts.id)     |--------
+| type           | enum(DEBIT, CREDIT)         |
+| amount         | numeric(precision, scale)   |
