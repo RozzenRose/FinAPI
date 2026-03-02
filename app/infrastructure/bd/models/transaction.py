@@ -3,7 +3,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, DateTime
 
 from app.infrastructure.bd.engine import Base
-from app.infrastructure.bd.models import TransactionEntry
 
 from datetime import datetime
 from typing import List
