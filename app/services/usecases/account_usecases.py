@@ -26,7 +26,7 @@ class CreateAccountUseCase:
         return account
 
 
-class GetAllAccounts:
+class GetAllAccountsUseCase:
 
     def __init__(self, account_repo: IAccountRepository):
         self.account_repo = account_repo
@@ -38,7 +38,7 @@ class GetAllAccounts:
         return data
 
 
-class GetAccountByName:
+class GetAccountByNameUseCase:
 
     def __init__(self, account_repo: IAccountRepository):
         self.account_repo = account_repo

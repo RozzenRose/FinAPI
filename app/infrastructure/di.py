@@ -1,7 +1,7 @@
 from fastapi import Depends
 
 from app.infrastructure.bd.engine import session_factory
-from app.services.usecases.account_usecases import CreateAccountUseCase, GetAllAccounts, GetAccountByName
+from app.services.usecases.account_usecases import CreateAccountUseCase, GetAllAccountsUseCase, GetAccountByNameUseCase
 from app.infrastructure.repositories.account_repository import SqlAlchemyAccountRepo
 
 
@@ -25,10 +25,10 @@ def get_create_account_use_case(
 def get_all_acounts_usecase(
         repo=Depends(get_account_repo)
 ):
-    return GetAllAccounts(repo)
+    return GetAllAccountsUseCase(repo)
 
 
 def get_account_by_name(
         repo=Depends(get_account_repo)
 ):
-    return GetAccountByName(repo)
+    return GetAccountByNameUseCase(repo)
