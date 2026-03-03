@@ -38,7 +38,7 @@ class SqlAlchemyAccountRepo(IAccountRepository):
         if not data:
             return None
 
-        return [Account(id=data.id, name=item.name, type=item.type) for item in data]
+        return [Account(id=item.id, name=item.name, type=item.type) for item in data]
 
 
     async def get_by_id(self, id: UUID) -> Account | None:

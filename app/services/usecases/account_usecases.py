@@ -3,6 +3,8 @@ from app.domain.interfaces.account_repository import IAccountRepository
 from app.domain.exceptions import AccountAlreadyExists, AccountNotFound, WeHaveNotAnyAccounts
 from app.domain.enums import AccountType
 
+from uuid import UUID
+
 
 class CreateAccountUseCase:
 
@@ -38,15 +40,15 @@ class GetAllAccountsUseCase:
         return data
 
 
-class GetAccountByNameUseCase:
+class GetAccountByIdUseCase:
 
     def __init__(self, account_repo: IAccountRepository):
         self.account_repo = account_repo
 
-    async def execute(self, name: str) -> Account:
-        data = await self.account_repo.get_by_name(name)
+    async def execute(self, id: UUID):
+        data = await self.account_repo.get_by_id(id)
         if not data:
             raise AccountNotFound(
-                f"Account {name} is not found"
+                f"Account with {id} is not found"
             )
         return data

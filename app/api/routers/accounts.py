@@ -1,5 +1,6 @@
 from http.client import HTTPException
 from typing import Annotated
+from uuid import UUID
 
 from fastapi import APIRouter, Depends
 from app.api.schemas.schemas_accounts import CreateAccount
@@ -7,7 +8,7 @@ from app.domain.exceptions import AccountAlreadyExists
 from app.infrastructure.di import get_create_account_use_case, get_all_acounts_usecase, get_account_by_name
 from app.services.usecases.account_usecases import (CreateAccountUseCase,
                                                     GetAllAccountsUseCase,
-                                                    GetAccountByNameUseCase)
+                                                    GetAccountByIdUseCase)
 
 router = APIRouter(prefix='/api', tags=['api'])
 
@@ -26,7 +27,7 @@ async def get_all_accounts(use_case: Annotated[GetAllAccountsUseCase, Depends(ge
     return await use_case.execute()
 
 
-@router.get("/accounts/{name}")
-async def get_account_by_name(name: str,
-                              use_case: Annotated[GetAccountByNameUseCase, Depends(get_account_by_name)]):
-    return await use_case.execute(name)
+@router.get("/accounts/{id}")
+async def get_account_by_name(id: UUID,
+                              use_case: Annotated[GetAccountByIdUseCase, Depends(get_account_by_name)]):
+    return await use_case.execute(id)
