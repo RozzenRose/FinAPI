@@ -18,12 +18,15 @@ class SqlAlchemyTransactionRepo(ITransactionRepository):
 
     async def create_transaction(self, transaction: Transaction) -> None:
         transaction_orm = TransactionModel(
+            id=transaction.id,
             description=transaction.description,
-            date=transaction.date,
+            timestamp=transaction.timestamp,
         )
         transaction_orm.entries = [
             TransactionEntryModel(
+                id=entry.id,
                 account_id=entry.account_id,
+                transaction_id=entry.account_id,
                 type=entry.type.value,  # Enum → str
                 amount=entry.amount,
             )
@@ -37,7 +40,7 @@ class SqlAlchemyTransactionRepo(ITransactionRepository):
         return Transaction(
             id=data.id,
             description=data.description,
-            date=data.timestamp,
+            timestamp=data.timestamp,
             entries=[
                 TransactionEntry(
                     account_id=entry.account_id,
