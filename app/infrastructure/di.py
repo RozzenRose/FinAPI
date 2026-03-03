@@ -32,3 +32,9 @@ def get_account_by_name(
         repo=Depends(get_account_repo)
 ):
     return GetAccountByIdUseCase(repo)
+
+
+def get_transaction_repo(
+        session=Depends(get_db)
+):
+    return SqlAlchemyAccountRepo(session)
