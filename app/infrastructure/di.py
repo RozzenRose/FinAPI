@@ -3,6 +3,7 @@ from fastapi import Depends
 from app.infrastructure.db.engine import session_factory
 from app.services.usecases.account_usecases import CreateAccountUseCase, GetAllAccountsUseCase, GetAccountByIdUseCase
 from app.infrastructure.repositories.account_repository import SqlAlchemyAccountRepo
+from app.infrastructure.repositories.transaction_repository import SqlAlchemyTransactionRepo
 
 
 async def get_db():
@@ -28,7 +29,7 @@ def get_all_acounts_usecase(
     return GetAllAccountsUseCase(repo)
 
 
-def get_account_by_name(
+def get_account_by_id(
         repo=Depends(get_account_repo)
 ):
     return GetAccountByIdUseCase(repo)
