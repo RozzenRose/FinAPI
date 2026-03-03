@@ -4,6 +4,7 @@ from app.infrastructure.db.engine import session_factory
 from app.services.usecases.account_usecases import CreateAccountUseCase, GetAllAccountsUseCase, GetAccountByIdUseCase
 from app.infrastructure.repositories.account_repository import SqlAlchemyAccountRepo
 from app.infrastructure.repositories.transaction_repository import SqlAlchemyTransactionRepo
+from app.services.usecases.transaction_usecases import CreateTransactionUseCase
 
 
 async def get_db():
@@ -17,13 +18,13 @@ def get_account_repo(
     return SqlAlchemyAccountRepo(session)
 
 
-def get_create_account_use_case(
+def get_create_account_usecase(
         repo=Depends(get_account_repo)
 ):
     return CreateAccountUseCase(repo)
 
 
-def get_all_acounts_usecase(
+def get_all_accounts_usecase(
         repo=Depends(get_account_repo)
 ):
     return GetAllAccountsUseCase(repo)
@@ -38,4 +39,9 @@ def get_account_by_id(
 def get_transaction_repo(
         session=Depends(get_db)
 ):
-    return SqlAlchemyAccountRepo(session)
+    return SqlAlchemyTransactionRepo(session)
+
+def get_create_transaction_usecase(
+        repo=Depends(get_transaction_repo)
+):
+    return CreateTransactionUseCase(repo)
