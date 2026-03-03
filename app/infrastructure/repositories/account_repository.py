@@ -2,7 +2,7 @@ from sqlalchemy import select
 from uuid import UUID
 
 from app.domain.interfaces.account_repository import IAccountRepository
-from app.infrastructure.bd.models.account import Account as AccountModel
+from app.infrastructure.db.models.account import Account as AccountModel
 from app.domain.entities.account import Account
 
 
@@ -25,6 +25,7 @@ class SqlAlchemyAccountRepo(IAccountRepository):
 
     async def save(self, account: Account) -> None:
         model = AccountModel(
+            id=account.id,
             name=account.name,
             type=account.type
         )

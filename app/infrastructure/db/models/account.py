@@ -2,7 +2,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Enum
 
-from app.infrastructure.bd.engine import Base
+from app.infrastructure.db.engine import Base
 from app.domain.enums import AccountType
 
 from typing import List
@@ -14,8 +14,7 @@ class Account(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
-        primary_key=True,
-        default=uuid.uuid4
+        primary_key=True
     )
 
     name: Mapped[str] = mapped_column(
