@@ -1,28 +1,23 @@
-from dataclasses import dataclass
-
+from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from app.domain.enums import AccountType, EntryType
-from uuid import UUID
+from uuid import UUID, uuid4
 from decimal import Decimal
 from datetime import datetime
 
 
 @dataclass
-class Account:
-    id: UUID
-    name: str
-    type: AccountType
-
-@dataclass
 class TransactionEntry:
     account_id: UUID
+    transaction_id: UUID
     type: EntryType
     amount: Decimal
+    id: UUID = field(default_factory=uuid4)
+
 
 @dataclass
 class Transaction:
-    id: UUID
-    transaction_id: UUID
-    account_id: UUID
     description: str
-    date: datetime
-    entries: list[TransactionEntry]
+    timestamp: datetime
+    entries: list[TransactionEntry] = field(default_factory=list)
+    id: UUID = field(default_factory=uuid4)
