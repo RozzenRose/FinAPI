@@ -14,5 +14,5 @@ class ITransactionRepository(ABC):
         pass
 
     @abstractmethod
-    async def get_transaction_by_id(self, uuid: UUID) -> Transaction | None:
+    async def get_transaction_by_id(self, id: UUID) -> Transaction | None:
         pass
