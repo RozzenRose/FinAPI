@@ -2,7 +2,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import ForeignKey, Enum, Numeric
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.infrastructure.bd.engine import Base
+from app.infrastructure.db.engine import Base
 from app.domain.enums import EntryType
 
 from decimal import Decimal

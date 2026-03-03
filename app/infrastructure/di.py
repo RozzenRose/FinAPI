@@ -1,6 +1,6 @@
 from fastapi import Depends
 
-from app.infrastructure.bd.engine import session_factory
+from app.infrastructure.db.engine import session_factory
 from app.services.usecases.account_usecases import CreateAccountUseCase, GetAllAccountsUseCase, GetAccountByIdUseCase
 from app.infrastructure.repositories.account_repository import SqlAlchemyAccountRepo
 

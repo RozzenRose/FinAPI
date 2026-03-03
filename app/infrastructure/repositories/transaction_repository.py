@@ -6,8 +6,8 @@ from sqlalchemy.orm import selectinload
 from app.domain.entities.transaction import Transaction, TransactionEntry
 from app.domain.enums import EntryType
 from app.domain.interfaces.transaction_repository import ITransactionRepository
-from app.infrastructure.bd.models.transaction import Transaction as TransactionModel
-from app.infrastructure.bd.models.transaction_entry import TransactionEntry as TransactionEntryModel
+from app.infrastructure.db.models.transaction import Transaction as TransactionModel
+from app.infrastructure.db.models.transaction_entry import TransactionEntry as TransactionEntryModel
 
 
 class SqlAlchemyTransactionRepo(ITransactionRepository):
@@ -46,6 +46,7 @@ class SqlAlchemyTransactionRepo(ITransactionRepository):
                 ) for entry in data.entries
             ]
         )
+
 
     async def get_all_transaction(self) -> list[Transaction] | None:
         stmt = (
