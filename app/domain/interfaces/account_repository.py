@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from uuid import UUID
 from app.domain.entities.account import Account
 
 
@@ -13,5 +14,9 @@ class IAccountRepository(ABC):
         pass
 
     @abstractmethod
-    async def get_all(self) -> list[Account]:
+    async def get_all(self) -> list[Account] | None:
+        pass
+
+    @abstractmethod
+    async def get_by_id(self, id: UUID) -> Account | None:
         pass

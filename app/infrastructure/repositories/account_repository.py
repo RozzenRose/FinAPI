@@ -1,4 +1,5 @@
 from sqlalchemy import select
+from uuid import UUID
 
 from app.domain.interfaces.account_repository import IAccountRepository
 from app.infrastructure.bd.models.account import Account as AccountModel
@@ -10,6 +11,7 @@ class SqlAlchemyAccountRepo(IAccountRepository):
     def __init__(self, session):
         self.session = session
 
+
     async def get_by_name(self, name: str) -> Account | None:
         result = await self.session.execute(
             select(AccountModel).where(AccountModel.name == name)
@@ -18,7 +20,8 @@ class SqlAlchemyAccountRepo(IAccountRepository):
         if not data:
             return None
 
-        return Account(name=data.name, type=data.type)
+        return Account(id=data.id, name=data.name, type=data.type)
+
 
     async def save(self, account: Account) -> None:
         model = AccountModel(
@@ -28,8 +31,22 @@ class SqlAlchemyAccountRepo(IAccountRepository):
         self.session.add(model)
         await self.session.commit()
 
+
     async def get_all(self) -> list[Account]:
         result = await self.session.execute(select(AccountModel))
         data = result.scalars().all()
+        if not data:
+            return None
 
-        return [Account(name=item.name, type=item.type) for item in data]
+        return [Account(id=data.id, name=item.name, type=item.type) for item in data]
+
+
+    async def get_by_id(self, id: UUID) -> Account | None:
+        result = await self.session.execute(
+            select(AccountModel).where(AccountModel.id == id)
+        )
+        data = result.scalar_one_or_none()
+        if not data:
+            return None
+
+        return Account(id=data.id, name=data.name, type=data.type)
