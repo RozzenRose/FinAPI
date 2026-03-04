@@ -42,6 +42,7 @@ def get_transaction_repo(
     return SqlAlchemyTransactionRepo(session)
 
 def get_create_transaction_usecase(
-        repo=Depends(get_transaction_repo)
+        trans_repo=Depends(get_transaction_repo),
+        accou_repo=Depends(get_account_repo)
 ):
-    return CreateTransactionUseCase(repo)
+    return CreateTransactionUseCase(trans_repo, accou_repo)
