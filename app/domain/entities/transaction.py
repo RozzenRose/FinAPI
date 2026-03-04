@@ -23,7 +23,7 @@ class TransactionEntry:
 @dataclass
 class Transaction:
     description: str
-    timestamp: datetime
+    date: datetime
     entries: list[TransactionEntry] = field(default_factory=list)
     id: UUID = field(default_factory=uuid4)
 

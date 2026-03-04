@@ -19,7 +19,7 @@ class CreateTransactionUseCase:
 
     async def execute(self, description: str, date: datetime, raw_entries: list[EntryItem]) -> Transaction:
         # Build objects
-        transaction = Transaction(description=description, timestamp=date)
+        transaction = Transaction(description=description, date=date)
         transaction_entries = [TransactionEntry(account_id=item.account_id,
                                                 transaction_id=transaction.id,
                                                 type=item.type,
@@ -45,3 +45,5 @@ class GetTransactionByIdUseCase:
     async def execute(self, id: UUID) -> Transaction:
         transaction = await self.trans_repo.get_transaction_by_id(id)
         return transaction
+
+

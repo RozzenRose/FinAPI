@@ -20,7 +20,7 @@ class SqlAlchemyTransactionRepo(ITransactionRepository):
         transaction_orm = TransactionModel(
             id=transaction.id,
             description=transaction.description,
-            timestamp=transaction.timestamp,
+            timestamp=transaction.date,
         )
         transaction_orm.entries = [
             TransactionEntryModel(
@@ -40,10 +40,12 @@ class SqlAlchemyTransactionRepo(ITransactionRepository):
         return Transaction(
             id=data.id,
             description=data.description,
-            timestamp=data.timestamp,
+            date=data.timestamp,
             entries=[
                 TransactionEntry(
+                    id=entry.id,
                     account_id=entry.account_id,
+                    transaction_id=entry.transaction_id,
                     type=EntryType(entry.type),
                     amount=entry.amount,
                 ) for entry in data.entries
@@ -51,7 +53,7 @@ class SqlAlchemyTransactionRepo(ITransactionRepository):
         )
 
 
-    async def get_all_transaction(self) -> list[Transaction] | None:
+    async def get_all_transaction_by_account_id(self, account_id: UUID) -> list[Transaction] | None:
         stmt = (
             select(TransactionModel)
             .options(selectinload(TransactionModel.entries))
@@ -65,8 +67,11 @@ class SqlAlchemyTransactionRepo(ITransactionRepository):
     async def get_transaction_by_id(self, id: UUID) -> Transaction | None:
         stmt = (
             select(TransactionModel)
-            .where(TransactionModel.id == id)
+            .join(TransactionModel.entries)
+            .where(TransactionEntryModel.account_id == id)
             .options(selectinload(TransactionModel.entries))
+            .order_by(TransactionModel.date.desc())
+            .distinct()
         )
         result = await self.session.execute(stmt)
         data = result.scalar_one_or_none()
