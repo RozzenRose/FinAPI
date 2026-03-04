@@ -10,7 +10,7 @@ class ITransactionRepository(ABC):
         pass
 
     @abstractmethod
-    async def get_all_transaction(self) -> list[Transaction] | None:
+    async def get_all_transaction_by_account_id(self) -> list[Transaction] | None:
         pass
 
     @abstractmethod

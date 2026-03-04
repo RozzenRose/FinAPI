@@ -59,7 +59,7 @@ class SqlAlchemyTransactionRepo(ITransactionRepository):
             .join(TransactionModel.entries)  # JOIN entries
             .where(TransactionEntryModel.account_id == account_id)
             .options(selectinload(TransactionModel.entries))  # чтобы подтянуть все entries
-            .order_by(TransactionModel.date.desc())
+            .order_by(TransactionModel.timestamp.desc())
             .distinct()
         )
         result = await self.session.execute(stmt)
