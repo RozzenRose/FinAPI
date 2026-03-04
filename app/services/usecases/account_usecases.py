@@ -1,6 +1,6 @@
 from app.domain.entities.account import Account
 from app.domain.interfaces.account_repository import IAccountRepository
-from app.domain.exceptions import AccountAlreadyExists, AccountNotFound, WeHaveNotAnyAccounts
+from app.domain.exceptions import AccountAlreadyExists, AccountNotFound, WeHaveNotAnyAccounts, NoNameAccount
 from app.domain.enums import AccountType
 
 from uuid import UUID
@@ -12,6 +12,8 @@ class CreateAccountUseCase:
         self.account_repo = account_repo
 
     async def execute(self, name: str, type: AccountType) -> Account:
+        if not name:
+            raise NoNameAccount()
         existing = await self.account_repo.get_by_name(name)
         if existing:
             raise AccountAlreadyExists(
