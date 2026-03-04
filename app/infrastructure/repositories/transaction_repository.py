@@ -56,8 +56,11 @@ class SqlAlchemyTransactionRepo(ITransactionRepository):
     async def get_all_transaction_by_account_id(self, account_id: UUID) -> list[Transaction] | None:
         stmt = (
             select(TransactionModel)
-            .options(selectinload(TransactionModel.entries))
-            .order_by(TransactionModel.timestamp.desc())
+            .join(TransactionModel.entries)  # JOIN entries
+            .where(TransactionEntryModel.account_id == account_id)
+            .options(selectinload(TransactionModel.entries))  # чтобы подтянуть все entries
+            .order_by(TransactionModel.date.desc())
+            .distinct()
         )
         result = await self.session.execute(stmt)
         data = result.scalars().all()
@@ -67,11 +70,8 @@ class SqlAlchemyTransactionRepo(ITransactionRepository):
     async def get_transaction_by_id(self, id: UUID) -> Transaction | None:
         stmt = (
             select(TransactionModel)
-            .join(TransactionModel.entries)
-            .where(TransactionEntryModel.account_id == id)
+            .where(TransactionModel.id == id)
             .options(selectinload(TransactionModel.entries))
-            .order_by(TransactionModel.date.desc())
-            .distinct()
         )
         result = await self.session.execute(stmt)
         data = result.scalar_one_or_none()
