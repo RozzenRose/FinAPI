@@ -7,7 +7,7 @@ from app.infrastructure.repositories.account_repository import SqlAlchemyAccount
 from app.domain.entities.transaction import Transaction
 from app.api.schemas.schemas_transaction import EntryItem
 from app.domain.entities.transaction import TransactionEntry
-from app.domain.exceptions import AccountNotFound
+from app.domain.exceptions import AccountNotFound, NoDescription
 
 
 class CreateTransactionUseCase:
@@ -19,6 +19,8 @@ class CreateTransactionUseCase:
         self.account_repo = account_repo
 
     async def execute(self, description: str, date: datetime, raw_entries: list[EntryItem]) -> Transaction:
+        if not description:
+            raise NoDescription
         # Build objects
         transaction = Transaction(description=description, date=date)
         transaction_entries = [TransactionEntry(account_id=item.account_id,
@@ -61,4 +63,4 @@ class GetTransactionByAccountsIdUseCase:
         account = await self.account_repo.get_by_id(id)
         transactions = await self.transaction_repo.get_all_transaction_by_account_id(id)
         balance = self.balance_calculator.calculate(account, transactions)
-        return [account, {"balance": balance}, transactions, ]
+        return [account, {"balance": balance}, transactions]

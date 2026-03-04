@@ -57,4 +57,4 @@ class Transaction:
             raise SumOfCreditIsNotPositive
 
         if debit_total != credit_total:
-            raise DebitIsNotEqualCredit()
+            raise DebitIsNotEqualCredit

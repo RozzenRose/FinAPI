@@ -44,3 +44,6 @@ class SumOfDebitIsNotPositive(DomainException):
 
 class DebitIsNotEqualCredit(DomainException):
     detail = "Debits is not equal Credits!"
+
+class NoDescription(DomainException):
+    detail = "No description"
