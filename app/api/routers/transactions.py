@@ -29,5 +29,5 @@ async def get_transaction_by_id(id: UUID,
 @router.get("/accounts/{id}/transactions")
 async def get_transactions_by_account_id(id: UUID,
                                          use_case: Annotated[GetTransactionByAccountsIdUseCase,
-                                            Depends(get_transactions_by_account_id_usecase)]):
+                                         Depends(get_transactions_by_account_id_usecase)]):
     return await use_case.execute(id)
