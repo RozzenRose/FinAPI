@@ -47,3 +47,11 @@ class GetTransactionByIdUseCase:
         return transaction
 
 
+class GetTransactionByAccountsIdUseCase:
+
+    def __init__(self, transaction_repo: SqlAlchemyTransactionRepo):
+        self.repo = transaction_repo
+
+    async def execute(self, id: UUID) -> list[Transaction]:
+        transactions = await self.repo.get_all_transaction_by_account_id(id)
+        return transactions
