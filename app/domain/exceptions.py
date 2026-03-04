@@ -21,6 +21,9 @@ class WeHaveNotAnyAccounts(DomainException):
     status_code = 404
     detail = "We have not any accounts"
 
+class NoNameAccount(DomainException):
+    detail = "Account must be named"
+
 
 
 
