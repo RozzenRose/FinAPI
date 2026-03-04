@@ -1,5 +1,6 @@
 from fastapi import Depends
 
+from app.domain.balance_calculator import BalanceCalculator
 from app.infrastructure.db.engine import session_factory
 from app.services.usecases.account_usecases import CreateAccountUseCase, GetAllAccountsUseCase, GetAccountByIdUseCase
 from app.infrastructure.repositories.account_repository import SqlAlchemyAccountRepo
@@ -56,8 +57,13 @@ def get_transaction_by_id_usecase(
     return GetTransactionByIdUseCase(repo)
 
 
+def get_balance_calculator() -> BalanceCalculator:
+    return BalanceCalculator()
+
+
 def get_transactions_by_account_id_usecase(
         trans_repo = Depends(get_transaction_repo),
-        accou_repo=Depends(get_account_repo)
+        accou_repo=Depends(get_account_repo),
+        balance_calculator=Depends(get_balance_calculator)
 ):
-    return GetTransactionByAccountsIdUseCase(trans_repo, accou_repo)
+    return GetTransactionByAccountsIdUseCase(trans_repo, accou_repo, balance_calculator)

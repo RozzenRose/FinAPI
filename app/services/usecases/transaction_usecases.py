@@ -1,6 +1,7 @@
 from datetime import datetime
 from uuid import UUID
 
+from app.domain.balance_calculator import BalanceCalculator
 from app.infrastructure.repositories.transaction_repository import SqlAlchemyTransactionRepo
 from app.infrastructure.repositories.account_repository import SqlAlchemyAccountRepo
 from app.domain.entities.transaction import Transaction
@@ -50,12 +51,14 @@ class GetTransactionByIdUseCase:
 class GetTransactionByAccountsIdUseCase:
 
     def __init__(self, transaction_repo: SqlAlchemyTransactionRepo,
-                 account_repo: SqlAlchemyAccountRepo):
+                 account_repo: SqlAlchemyAccountRepo,
+                 balance_calculator: BalanceCalculator):
+        self.balance_calculator = balance_calculator
         self.transaction_repo = transaction_repo
         self.account_repo = account_repo
-
 
     async def execute(self, id: UUID) -> list[Transaction]:
         account = await self.account_repo.get_by_id(id)
         transactions = await self.transaction_repo.get_all_transaction_by_account_id(id)
-        return [account, transactions]
+        balance = self.balance_calculator.calculate(account, transactions)
+        return [account, {"balance": balance}, transactions, ]
