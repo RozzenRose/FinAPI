@@ -57,6 +57,7 @@ def get_transaction_by_id_usecase(
 
 
 def get_transactions_by_account_id_usecase(
-        repo = Depends(get_transaction_repo)
+        trans_repo = Depends(get_transaction_repo),
+        accou_repo=Depends(get_account_repo)
 ):
-    return GetTransactionByAccountsIdUseCase(repo)
+    return GetTransactionByAccountsIdUseCase(trans_repo, accou_repo)

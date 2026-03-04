@@ -49,9 +49,13 @@ class GetTransactionByIdUseCase:
 
 class GetTransactionByAccountsIdUseCase:
 
-    def __init__(self, transaction_repo: SqlAlchemyTransactionRepo):
-        self.repo = transaction_repo
+    def __init__(self, transaction_repo: SqlAlchemyTransactionRepo,
+                 account_repo: SqlAlchemyAccountRepo):
+        self.transaction_repo = transaction_repo
+        self.account_repo = account_repo
+
 
     async def execute(self, id: UUID) -> list[Transaction]:
-        transactions = await self.repo.get_all_transaction_by_account_id(id)
-        return transactions
+        account = await self.account_repo.get_by_id(id)
+        transactions = await self.transaction_repo.get_all_transaction_by_account_id(id)
+        return [account, transactions]
