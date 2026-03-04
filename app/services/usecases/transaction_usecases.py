@@ -1,4 +1,5 @@
 from datetime import datetime
+from uuid import UUID
 
 from app.infrastructure.repositories.transaction_repository import SqlAlchemyTransactionRepo
 from app.infrastructure.repositories.account_repository import SqlAlchemyAccountRepo
@@ -33,4 +34,14 @@ class CreateTransactionUseCase:
                 raise AccountNotFound(f"Account ({item.account_id}) not found")
         # Save transaction data
         await self.transaction_repo.create_transaction(transaction)
+        return transaction
+
+
+class GetTransactionByIdUseCase:
+
+    def __init__(self, transaction_repo: SqlAlchemyTransactionRepo):
+        self.trans_repo = transaction_repo
+
+    async def execute(self, id: UUID) -> Transaction:
+        transaction = await self.trans_repo.get_transaction_by_id(id)
         return transaction
