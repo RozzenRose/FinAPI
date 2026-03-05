@@ -31,6 +31,7 @@ async def setup_database():
     await engine.dispose()
 
 
+### create account ###
 async def test_create_account_integration(setup_database):
     session_factory, engine = setup_database
 
@@ -68,3 +69,81 @@ async def test_create_account_integration(setup_database):
             assert db_account is not None
             assert db_account.name == account_data["name"]
             assert db_account.type == AccountType.ASSET
+
+
+### get_account_by_id ###
+async def test_get_all_accounts_integration(setup_database):
+    """Integration test for getting all accounts via GET /api/accounts/."""
+    session_factory, engine = setup_database
+
+    async with session_factory() as db_session:
+        app = FastAPI()
+        app.include_router(accounts_router)
+
+        async def override_get_db():
+            yield db_session
+
+        app.dependency_overrides[get_db] = override_get_db
+
+        async with AsyncClient(transport=ASGITransport(app), base_url="http://testserver") as client:
+            accounts_data = [
+                {"name": "Cash Account", "type": "ASSET"},
+                {"name": "Credit Card", "type": "LIABILITY"}
+            ]
+
+            created_accounts = []
+            for account_data in accounts_data:
+                response = await client.post("/api/accounts", json=account_data)
+                assert response.status_code == 200
+                created_accounts.append(response.json())
+
+            # Get all accounts
+            response = await client.get("/api/accounts")
+
+            assert response.status_code == 200
+            accounts = response.json()
+
+            assert len(accounts) == 2
+
+            # check accounts
+            # sort lists for comparing
+            accounts_sorted = sorted(accounts, key=lambda x: x["id"])
+            created_sorted = sorted(created_accounts, key=lambda x: x["id"])
+
+            for i, account in enumerate(accounts_sorted):
+                assert account["id"] == created_sorted[i]["id"]
+                assert account["name"] == created_sorted[i]["name"]
+                assert account["type"] == created_sorted[i]["type"]
+
+
+async def test_get_empty_accounts_list_integration(setup_database):
+    """Integration test for getting accounts when database is empty."""
+    session_factory, engine = setup_database
+
+    async with session_factory() as db_session:
+        app = FastAPI()
+        app.include_router(accounts_router)
+
+        from fastapi import Request
+        from fastapi.responses import JSONResponse
+        from app.domain.exceptions import WeHaveNotAnyAccounts
+
+        @app.exception_handler(WeHaveNotAnyAccounts)
+        async def we_have_not_any_accounts_handler(request: Request, exc: WeHaveNotAnyAccounts):
+            return JSONResponse(
+                status_code=404,
+                content={"detail": "We have not any accounts"}
+            )
+
+        async def override_get_db():
+            yield db_session
+
+        app.dependency_overrides[get_db] = override_get_db
+
+        async with AsyncClient(transport=ASGITransport(app), base_url="http://testserver") as client:
+            response = await client.get("/api/accounts")
+
+            assert response.status_code == 404
+            error_data = response.json()
+            assert "detail" in error_data
+            assert error_data["detail"] == "We have not any accounts"
