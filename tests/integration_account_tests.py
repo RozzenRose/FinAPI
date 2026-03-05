@@ -13,6 +13,7 @@ from app.config import settings
 from app.domain.enums import AccountType
 from app.infrastructure.di import get_db
 
+
 pytestmark = pytest.mark.asyncio
 
 
@@ -22,7 +23,7 @@ async def setup_database():
     from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
     from app.infrastructure.db.engine import Base
 
-    engine = create_async_engine(settings.database_url, echo=False)
+    engine = create_async_engine(settings.database_tests_url, echo=False)
     session_factory = async_sessionmaker(engine)
 
     async with engine.begin() as conn:
