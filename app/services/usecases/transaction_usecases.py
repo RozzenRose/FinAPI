@@ -7,7 +7,7 @@ from app.infrastructure.repositories.account_repository import SqlAlchemyAccount
 from app.domain.entities.transaction import Transaction
 from app.api.schemas.schemas_transaction import EntryItem
 from app.domain.entities.transaction import TransactionEntry
-from app.domain.exceptions import AccountNotFound, NoDescription
+from app.domain.exceptions import AccountNotFound, NoDescription, TransactionNotFound
 
 
 class CreateTransactionUseCase:
@@ -47,6 +47,8 @@ class GetTransactionByIdUseCase:
 
     async def execute(self, id: UUID) -> Transaction:
         transaction = await self.trans_repo.get_transaction_by_id(id)
+        if not transaction:
+            raise TransactionNotFound(f'Transaction ({id}) is not found')
         return transaction
 
 

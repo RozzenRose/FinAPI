@@ -47,3 +47,7 @@ class DebitIsNotEqualCredit(DomainException):
 
 class NoDescription(DomainException):
     detail = "No description"
+
+class TransactionNotFound(DomainException):
+    status_code = 404
+    detail = "Transaction not found"
