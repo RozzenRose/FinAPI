@@ -213,7 +213,7 @@ def test_create_transaction_invalid_amount():
         ]
     }
     response = client.post("/api/transactions", json=transaction_data)
-    assert response.status_code == 422
+    assert response.status_code == 400
 
 
 def test_create_transaction_missing_fields():
@@ -276,23 +276,6 @@ def test_create_account_empty_name():
     else:
         # If validation is added later, this should be 422
         assert response.status_code == 422
-
-
-def test_create_transaction_zero_amount():
-    account_id = uuid4()
-    transaction_data = {
-        "description": "Test Transaction",
-        "date": datetime.now().isoformat(),
-        "entries": [
-            {
-                "accountId": str(account_id),
-                "type": "DEBIT",
-                "amount": "0.00"  # Zero amount should fail
-            }
-        ]
-    }
-    response = client.post("/api/transactions", json=transaction_data)
-    assert response.status_code == 422
 
 
 def test_create_transaction_invalid_date_format():

@@ -6,8 +6,6 @@ from datetime import datetime
 from app.domain.exceptions import (EntriesQuantityIsWrong,
                                    NoCreditEntries,
                                    NoDebitEntries,
-                                   SumOfDebitIsNotPositive,
-                                   SumOfCreditIsNotPositive,
                                    DebitIsNotEqualCredit, AmountCantBeNegative)
 
 
@@ -37,7 +35,7 @@ class Transaction:
         credit_exists = False
 
         for entry in self.entries:
-            if entry.amount < 0:
+            if entry.amount <= 0:
                 raise AmountCantBeNegative
             if entry.type == EntryType.DEBIT:
                 debit_exists = True
@@ -51,12 +49,6 @@ class Transaction:
 
         if not credit_exists:
             raise NoCreditEntries()
-
-        if debit_total < 0:
-            raise SumOfDebitIsNotPositive
-
-        if credit_total < 0:
-            raise SumOfCreditIsNotPositive
 
         if debit_total != credit_total:
             raise DebitIsNotEqualCredit

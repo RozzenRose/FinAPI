@@ -6,9 +6,7 @@ from app.domain.balance_calculator import BalanceCalculator
 from app.domain.exceptions import (EntriesQuantityIsWrong,
                                    NoDebitEntries,
                                    NoCreditEntries,
-                                   SumOfDebitIsNotPositive,
-                                   SumOfCreditIsNotPositive,
-                                   DebitIsNotEqualCredit)
+                                   DebitIsNotEqualCredit, AmountCantBeNegative)
 from app.domain.enums import AccountType, EntryType
 
 
@@ -77,34 +75,6 @@ def test_transaction_validate_credit_not_exists():
         transaction.validate()
 
 
-def test_transaction_validate_debits_negative():
-    account_id = uuid4()
-    transaction = Transaction(
-            description="Deposit",
-            date="2026-03-04T16:53:11.540Z",
-            entries=[TransactionEntry(transaction_id=uuid4(), account_id=account_id,
-                                      amount=-100, type=EntryType.DEBIT),
-                     TransactionEntry(transaction_id=uuid4(), account_id=account_id,
-                                      amount=100, type=EntryType.CREDIT)]
-        )
-    with pytest.raises(SumOfDebitIsNotPositive):
-        transaction.validate()
-
-
-def test_transaction_validate_credits_negative():
-    account_id = uuid4()
-    transaction = Transaction(
-            description="Deposit",
-            date="2026-03-04T16:53:11.540Z",
-            entries=[TransactionEntry(transaction_id=uuid4(), account_id=account_id,
-                                      amount=100, type=EntryType.DEBIT),
-                     TransactionEntry(transaction_id=uuid4(), account_id=account_id,
-                                      amount=-100, type=EntryType.CREDIT)]
-        )
-    with pytest.raises(SumOfCreditIsNotPositive):
-        transaction.validate()
-
-
 def test_transaction_validate_credits_not_equal_debits():
     account_id = uuid4()
     transaction = Transaction(
@@ -117,3 +87,18 @@ def test_transaction_validate_credits_not_equal_debits():
         )
     with pytest.raises(DebitIsNotEqualCredit):
         transaction.validate()
+
+
+def test_transaction_validate_credits_amount_negative():
+    account_id = uuid4()
+    transaction = Transaction(
+            description="Deposit",
+            date="2026-03-04T16:53:11.540Z",
+            entries=[TransactionEntry(transaction_id=uuid4(), account_id=account_id,
+                                      amount=-100, type=EntryType.DEBIT),
+                     TransactionEntry(transaction_id=uuid4(), account_id=account_id,
+                                      amount=200, type=EntryType.CREDIT)]
+        )
+    with pytest.raises(AmountCantBeNegative):
+        transaction.validate()
+

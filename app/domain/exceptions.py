@@ -36,12 +36,6 @@ class NoCreditEntries(DomainException):
 class NoDebitEntries(DomainException):
     detail = "There must be at least one DEBIT entries"
 
-class SumOfCreditIsNotPositive(DomainException):
-    detail = "Sum of credit entries is not positive"
-
-class SumOfDebitIsNotPositive(DomainException):
-    detail = "Sum of debit entries is not positive"
-
 class DebitIsNotEqualCredit(DomainException):
     detail = "Debits is not equal Credits!"
 
