@@ -41,7 +41,7 @@ class GetAccountByIdUseCase:
     def __init__(self, account_repo: IAccountRepository):
         self.account_repo = account_repo
 
-    async def execute(self, id: UUID):
+    async def execute(self, id: UUID) -> Account:
         data = await self.account_repo.get_by_id(id)
         if not data:
             raise AccountNotFound(
