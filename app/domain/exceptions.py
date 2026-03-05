@@ -51,3 +51,6 @@ class NoDescription(DomainException):
 class TransactionNotFound(DomainException):
     status_code = 404
     detail = "Transaction not found"
+
+class AmountCantBeNegative(DomainException):
+    detail = "Amount can't be negative"

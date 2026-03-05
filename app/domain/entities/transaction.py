@@ -8,7 +8,7 @@ from app.domain.exceptions import (EntriesQuantityIsWrong,
                                    NoDebitEntries,
                                    SumOfDebitIsNotPositive,
                                    SumOfCreditIsNotPositive,
-                                   DebitIsNotEqualCredit)
+                                   DebitIsNotEqualCredit, AmountCantBeNegative)
 
 
 @dataclass
@@ -37,6 +37,8 @@ class Transaction:
         credit_exists = False
 
         for entry in self.entries:
+            if entry.amount < 0:
+                raise AmountCantBeNegative
             if entry.type == EntryType.DEBIT:
                 debit_exists = True
                 debit_total += entry.amount
