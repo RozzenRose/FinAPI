@@ -6,10 +6,10 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from alembic import context
 from app.config import settings
 
-from app.infrastructure.bd.engine import Base
-from app.infrastructure.bd.models.account import Account
-from app.infrastructure.bd.models.transaction import Transaction
-from app.infrastructure.bd.models.transaction_entry import TransactionEntry
+from app.infrastructure.db.engine import Base
+from app.infrastructure.db.models.account import Account
+from app.infrastructure.db.models.transaction import Transaction
+from app.infrastructure.db.models.transaction_entry import TransactionEntry
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
