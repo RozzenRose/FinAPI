@@ -1,14 +1,15 @@
 from decimal import Decimal
+from typing import List
 from uuid import UUID
 
 from app.domain.entities.account import Account
-from app.domain.entities.transaction import Transaction
+from app.domain.entities.transaction import Transaction, TransactionEntry
 from app.domain.enums import EntryType, AccountType
 
 
 class BalanceCalculator:
 
-    def _normal_debit(self, account_id, transactions):
+    def _normal_debit(self, account_id: UUID, transactions: List[Transaction]):
         balance = Decimal('0')
 
         for transaction in transactions:
@@ -21,7 +22,7 @@ class BalanceCalculator:
 
         return balance
 
-    def _normal_credit(self, account_id, transactions):
+    def _normal_credit(self, account_id: UUID, transactions: List[Transaction]):
         balance = Decimal('0')
 
         for transaction in transactions:
