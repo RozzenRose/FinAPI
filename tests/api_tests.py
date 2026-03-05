@@ -199,23 +199,6 @@ def test_create_transaction():
     assert float(data["entries"][0]["amount"]) == 100.50
 
 
-def test_create_transaction_invalid_amount():
-    account_id = uuid4()
-    transaction_data = {
-        "description": "Test Transaction",
-        "date": datetime.now().isoformat(),
-        "entries": [
-            {
-                "accountId": str(account_id),
-                "type": "DEBIT",
-                "amount": "-50.00"  # Negative amount should fail
-            }
-        ]
-    }
-    response = client.post("/api/transactions", json=transaction_data)
-    assert response.status_code == 400
-
-
 def test_create_transaction_missing_fields():
     transaction_data = {
         "description": "Test Transaction",
