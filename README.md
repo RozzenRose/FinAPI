@@ -1,7 +1,7 @@
 ### Архитектура
 Архитектура разделена на слои:
 
-- `API` слой
+- `API` слой  
 Принимает `http` запросы. Зависят от `usecases`
 `account router`: `POST /api/accounts` `GET /api/accounts` `GET /api/accounts/{id}`
 
