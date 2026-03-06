@@ -24,27 +24,27 @@
 Файл `.env` на гите не по ошибке, а для того, что бы упростить жизнь клонерам.
 
 ### Запуск тестов
-API тесты: 
+API тесты:  
 `python -m pytest tests/api_tests.py`
 
-Domain тесты:
+Domain тесты:  
 `python -m pytest tests/domain_tests.py`
 
-Тест SQLAlchemy моделей: 
+Тест SQLAlchemy моделей:  
 `python -m pytest tests/models_tests.py`
 
-Тест Pydantic моделей:
-`python -m pytest tests/pydantic_models_tests/account_schemas_tests.py`
+Тест Pydantic моделей:  
+`python -m pytest tests/pydantic_models_tests/account_schemas_tests.py`  
 `python -m pytest tests/pydantic_models_tests/transaction_schemas_tests.py`
 
-Usecases тест: 
-`python -m pytest tests/usecases_tests/account_usecases_tests.py`
+Usecases тест:  
+`python -m pytest tests/usecases_tests/account_usecases_tests.py`  
 `python -m pytest tests/usecases_tests/transaction_usecases_tests.py`
 
-Repositories тест:
-`python -m pytest tests/repositories_tests/account_repository_tests.py`
+Repositories тест:  
+`python -m pytest tests/repositories_tests/account_repository_tests.py`  
 `python -m pytest tests/repositories_tests/transaction_repository_tests.py`
 
-Интеграционные тесты:
-`python -m pytest tests/integration_account_tests.py`
+Интеграционные тесты:  
+`python -m pytest tests/integration_account_tests.py`  
 `python -m pytest tests/integration_transaction_tests.py`
