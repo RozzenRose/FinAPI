@@ -80,7 +80,7 @@ async def test_get_by_name(repo: SqlAlchemyAccountRepo):
 
 @pytest.mark.asyncio
 async def test_get_all(repo: SqlAlchemyAccountRepo):
-    # Очистка таблицы перед тестом
+    # clean tabel before test
     all_accounts = await repo.get_all()
     if all_accounts:
         for a in all_accounts:
@@ -89,7 +89,7 @@ async def test_get_all(repo: SqlAlchemyAccountRepo):
                 await repo.session.delete(model)
         await repo.session.commit()
 
-    # Создаём несколько аккаунтов
+    # Create some accounts
     accounts = [
         Account(id=uuid.uuid4(), name=f"Acc{i}", type=AccountType.ASSET)
         for i in range(3)

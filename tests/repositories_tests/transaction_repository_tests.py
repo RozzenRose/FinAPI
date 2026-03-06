@@ -16,10 +16,7 @@ from app.domain.enums import EntryType, AccountType
 from app.infrastructure.repositories.transaction_repository import SqlAlchemyTransactionRepo
 
 
-# ---------------------------
 # Async SQLite in-memory fixtures
-# ---------------------------
-
 @pytest_asyncio.fixture(scope="session")
 async def async_engine():
     engine = create_async_engine("sqlite+aiosqlite:///:memory:", echo=False)
@@ -47,10 +44,6 @@ async def repo(session):
     return SqlAlchemyTransactionRepo(session)
 
 
-# ---------------------------
-# Helpers
-# ---------------------------
-
 async def create_account(session, name="Account1"):
     account = AccountModel(id=uuid.uuid4(), name=name, type=AccountType.ASSET)
     session.add(account)
@@ -58,10 +51,7 @@ async def create_account(session, name="Account1"):
     return account
 
 
-# ---------------------------
 # Tests
-# ---------------------------
-
 @pytest.mark.asyncio
 async def test_create_and_get_transaction(repo, session):
     account = await create_account(session)
@@ -97,7 +87,7 @@ async def test_create_and_get_transaction(repo, session):
 async def test_get_all_transactions_by_account(repo, session):
     account = await create_account(session, name="TestAccount2")
 
-    # Создаём 2 транзакции
+    # create 2 transaction
     txs = []
     for i in range(2):
         tx_id = uuid.uuid4()

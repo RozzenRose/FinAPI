@@ -14,7 +14,7 @@ from app.infrastructure.di import (get_create_account_usecase, get_all_accounts_
                                    get_transactions_by_account_id_usecase)
 
 
-# Fake use cases для тестов
+# Fake use cases for test
 class FakeCreateAccountUseCase:
     async def execute(self, name, type):
         return Account(id=uuid4(), name=name, type=type)
@@ -104,12 +104,12 @@ class FakeGetTransactionsByAccountIdUseCase:
             )
         ]
 
-# Тестовое приложение
+# test app
 app = FastAPI()
 app.include_router(accounts_router)
 app.include_router(transactions_router)
 
-# override Depends для тестов
+# override Depends for tests
 app.dependency_overrides = {
     get_create_account_usecase: lambda: FakeCreateAccountUseCase(),
     get_all_accounts_usecase: lambda: FakeGetAllAccountsUseCase(),
