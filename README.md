@@ -17,6 +17,34 @@
 Слой, который хранит `repositories`, классы для хранения методов обращения к хранилищам данных. 
 <img width="1696" height="447" alt="image" src="https://github.com/user-attachments/assets/b19802a2-15d1-4bdd-82d9-3e0243beff1d" />
 
+Структура базы данных:
+```
+accounts
+| column | type    |
+| ------ | ------- |
+| id     | UUID    |<<<---------------------------------
+| name   | VARCHAR |                                    |
+| type   | ENUM    |                                    |
+                                                        |
+                                                        |
+transaction                                             |
+| column      | type      |                             |
+| ----------- | --------- |                             |
+| id          | UUID (PK) |<<<----------------------    |
+| timestamp   | datetime  |                         |   |
+| description | text      |                         |   |
+                                                    |   |
+                                                    |   |
+transaction_entries                                 |   |
+| column         | type                        |    |   |
+| -------------- | --------------------------- |    |   |
+| id             | UUID (PK)                   |    |   |
+| transaction_id | UUID (FK → transactions.id) |----    |
+| account_id     | UUID (FK → accounts.id)     |--------
+| type           | enum(DEBIT, CREDIT)         |
+| amount         | numeric(precision, scale)   |
+```
+
 ### Запуск  
 Для запуска нужно просто зайти в директорию и выполнить `docekr compose up -d`.  
 Миграции будут применены автоматически. `uvicorn` так же запустится автоматически. После запуска переходим в браузере `http://127.0.0.1:8000/docs#/`, там `Swagger` уже нарисовал минимальный интерфейс для работы с API.
